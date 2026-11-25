@@ -3,13 +3,16 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module.js';
 import { ValidationException } from './common/exceptions/index.js';
+import type { Environment } from './config/env.validation.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const configService = app.get(ConfigService);
-  const port = configService.get<number>('PORT', 3000);
-  const corsOrigin = configService.get<string>('CORS_ORIGIN');
+  const configService =
+    app.get<ConfigService<Environment, true>>(ConfigService);
+
+  const port = configService.get('PORT', { infer: true });
+  const corsOrigin = configService.get('CORS_ORIGIN', { infer: true });
 
   app.enableCors({
     origin: corsOrigin,
