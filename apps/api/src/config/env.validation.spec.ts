@@ -1,14 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { getEnvFilePath, validateEnv } from './env.validation.js';
 
+const validDatabaseEnv = {
+  DATABASE_URL: 'postgresql://user:password@localhost:5432/wortweise',
+  DIRECT_URL: 'postgresql://user:password@localhost:5432/wortweise',
+};
+
 describe('validateEnv', () => {
   it('should apply default values', () => {
-    const result = validateEnv({});
+    const result = validateEnv(validDatabaseEnv);
 
     expect(result).toEqual({
       NODE_ENV: 'development',
       PORT: 3000,
       CORS_ORIGIN: 'http://localhost:3000',
+      ...validDatabaseEnv,
     });
   });
 
@@ -17,12 +23,14 @@ describe('validateEnv', () => {
       NODE_ENV: 'production',
       PORT: '8080',
       CORS_ORIGIN: 'https://wortweise.com',
+      ...validDatabaseEnv,
     });
 
     expect(result).toEqual({
       NODE_ENV: 'production',
       PORT: 8080,
       CORS_ORIGIN: 'https://wortweise.com',
+      ...validDatabaseEnv,
     });
   });
 

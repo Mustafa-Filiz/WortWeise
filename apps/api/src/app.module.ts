@@ -7,6 +7,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { GlobalExceptionFilter } from './common/filters/global-exception.filter.js';
 import { AppLogger } from './common/logger/app-logger.service.js';
 import { getEnvFilePath, validateEnv } from './config/env.validation.js';
+import { PrismaModule } from './database/prisma.module.js';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { getEnvFilePath, validateEnv } from './config/env.validation.js';
       validate: validateEnv,
     }),
     HealthModule,
+    PrismaModule,
   ],
   controllers: [AppController],
   providers: [
